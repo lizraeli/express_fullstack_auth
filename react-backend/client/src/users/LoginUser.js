@@ -1,8 +1,14 @@
 import React from "react";
 import axios from "axios";
+import { Redirect } from "react-router";
 
-class NewUser extends React.Component {
-  state = { usernameInput: "", passwordInput: "", message: "" };
+class LoginUser extends React.Component {
+  state = {
+    usernameInput: "",
+    passwordInput: "",
+    message: "",
+    loggedIn: false
+  };
 
   handleUsernameChange = e => {
     this.setState({
@@ -27,25 +33,35 @@ class NewUser extends React.Component {
       return;
     }
     axios
-      .post("/users/new", {
-        username: this.state.usernameInput,
-        password: this.state.passwordInput
+      .post("/users/login", {
+        username: usernameInput,
+        password: passwordInput
       })
       .then(res => {
-        console.log(res.data);
-        this.setState({ usernameInput: "", passwordInput: "", message: "Inserted User" });
+        this.props.setUser(res.data);
+        this.setState({
+          loggedIn: true
+        });
       })
       .catch(err => {
-        console.log("error: ", err);
-        this.setState({ usernameInput: "", passwordInput: "", message: "Error inserting user" });
+        this.setState({
+          usernameInput: "",
+          passwordInput: "",
+          message: "username/password not found"
+        });
       });
   };
 
   render() {
-    const { usernameInput, passwordInput, message } = this.state;
+    const { usernameInput, passwordInput, message, loggedIn } = this.state;
+
+    if (loggedIn) {
+      return <Redirect to="/users" />;
+    }
+
     return (
       <div>
-        <h1> New User </h1>
+        <h1> Log In </h1>
 
         <form onSubmit={this.submitForm}>
           <label>
@@ -76,4 +92,4 @@ class NewUser extends React.Component {
   }
 }
 
-export default NewUser;
+export default LoginUser;

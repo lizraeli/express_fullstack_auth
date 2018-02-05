@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 
-class LoginUser extends React.Component {
+class NewUser extends React.Component {
   state = { usernameInput: "", passwordInput: "", message: "" };
 
   handleUsernameChange = e => {
@@ -26,16 +26,27 @@ class LoginUser extends React.Component {
       });
       return;
     }
+
     axios
-      .post("/users/login", {
-        username: this.state.usernameInput,
-        password: this.state.passwordInput
+      .post("/users/new", {
+        username: usernameInput,
+        password: passwordInput
       })
       .then(res => {
-        this.setState({ usernameInput: "", passwordInput: "", message: "Logged In" });
+        console.log(res.data);
+        this.setState({
+          usernameInput: "",
+          passwordInput: "",
+          message: "Inserted User"
+        });
       })
       .catch(err => {
-        this.setState({ usernameInput: "", passwordInput: "", message: "Error inserting user" });
+        console.log("error: ", err);
+        this.setState({
+          usernameInput: "",
+          passwordInput: "",
+          message: "Error inserting user"
+        });
       });
   };
 
@@ -43,7 +54,7 @@ class LoginUser extends React.Component {
     const { usernameInput, passwordInput, message } = this.state;
     return (
       <div>
-        <h1> Log In </h1>
+        <h1> New User </h1>
 
         <form onSubmit={this.submitForm}>
           <label>
@@ -74,4 +85,4 @@ class LoginUser extends React.Component {
   }
 }
 
-export default LoginUser;
+export default NewUser;

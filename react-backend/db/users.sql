@@ -6,8 +6,11 @@ CREATE DATABASE userlist;
 CREATE TABLE users (
   ID SERIAL PRIMARY KEY,
   username VARCHAR,
-  password_digest VARCHAR
+  password_digest VARCHAR,
+  hobbies TEXT
 );
 
-INSERT INTO users (username, password_digest)
-  VALUES ('Tyler', 'password'), ('Shannon', 'password1'), ('Richard', 'password2');
+/* tyler, password: 123456 */
+
+INSERT INTO users (username, password_digest, hobbies)
+  VALUES ('Tyler', '$2a$10$brAZfSmByFeZmPZ/MH5zne9YDhugjW9CtsBGgXqGfix0g1tcooZWq', 'swimming')
