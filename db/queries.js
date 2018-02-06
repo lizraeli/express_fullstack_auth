@@ -87,21 +87,24 @@ function updateSingleUser(req, res, next) {
 }
 
 function loginUser(req, res, next) {
-  passport.authenticate("local", (err, user, info) => {
-    if (err) {
-      res.status(500).send("error while trying to log in");
-    } else if (!user) {
-      res.status(401).send("invalid username/password");
-    } else if (user) {
-      req.logIn(user, function(err) {
-        if (err) {
-          res.status(500).send("error");
-        } else {
-          res.status(200).send(user);
-        }
-      });
-    }
-  })(req, res, next);
+  passport.authenticate("local", {});
+  // const authenticate = passport.authenticate("local", (err, user, info) => {
+  //   if (err) {
+  //     res.status(500).send("error while trying to log in");
+  //   } else if (!user) {
+  //     res.status(401).send("invalid username/password");
+  //   } else if (user) {
+  //     req.logIn(user, function(err) {
+  //       if (err) {
+  //         res.status(500).send("error");
+  //       } else {
+  //         res.status(200).send(user);
+  //       }
+  //     });
+  //   }
+  // });
+
+  // return authenticate(req, res, next);
 }
 
 function logoutUser(req, res, next) {
@@ -109,32 +112,27 @@ function logoutUser(req, res, next) {
   res.status(200).send("log out success");
 }
 
-function registerUser(req, res, next) {
-  return authHelpers
-    .createUser(req)
-    .then(response => {
-      passport.authenticate("local", (err, user, info) => {
-        if (user) {
-          res.status(200).json({
-            status: "success",
-            data: user,
-            message: "Registered one user"
-          });
-        }
-      })(req, res, next);
+function createUser(req, res, next) {
+  const hash = authHelpers.createHash(req.body.password);
+  console.log("createuser hash: ", hash);
+  db
+    .none(
+      "INSERT INTO users (username, password_digest) VALUES (${username}, ${password})",
+      { username: req.body.username, password: hash }
+    )
+    .then(() => {
+      res.send(`created user: ${req.body.username}`);
     })
     .catch(err => {
-      res.status(500).json({
-        status: "error",
-        error: err
-      });
+      console.log(err);
+      res.status(500).send("error creating user");
     });
 }
 
 module.exports = {
   getAllUsers: getAllUsers,
   getSingleUser: getSingleUser,
-  registerUser: registerUser,
+  createUser: createUser,
   updateSingleUser: updateSingleUser,
   loginUser: loginUser,
   logoutuser: logoutUser,
