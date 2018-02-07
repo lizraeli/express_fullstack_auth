@@ -8,3 +8,10 @@ cd express_fullstack_auth_2
 npm install
 npm start
 ```
+
+To set up the database and table:
+
+```bash
+cd db
+psql -f users.sql
+```
