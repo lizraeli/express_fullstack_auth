@@ -14,6 +14,8 @@ function createHash(password) {
 }
 
 function loginRequired(req, res, next) {
+  // if the user is logged in, passport will have attached
+  // the user to it
   if (!req.user) {
     return res.status(401).json({ status: "Please log in" });
   }
