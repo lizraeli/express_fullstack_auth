@@ -17,9 +17,10 @@ function loginRequired(req, res, next) {
   // if the user is logged in, passport will have attached
   // the user to it
   if (!req.user) {
-    return res.status(401).json({ status: "Please log in" });
+    res.status(401).json({ status: "Please log in" });
+    return;
   }
-  return next();
+  next();
 }
 
 module.exports = {

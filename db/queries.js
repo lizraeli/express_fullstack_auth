@@ -37,6 +37,12 @@ function updateUserHobbies(req, res, next) {
     });
 }
 
+/*
+  req.user = {
+    username: "..."
+  }
+
+*/
 function getUserHobbies(req, res, next) {
   console.log("get hobbies");
   db
