@@ -9,7 +9,7 @@ router.post("/new", db.createUser);
 router.post("/login", passport.authenticate("local"), (req, res) => {
   // If this function gets called, authentication was successful.
   // `req.user` contains the authenticated user;
-  res.send(`${req.user.username} is logged in`);
+  res.json(req.user);
 });
 
 router.get("/logout", loginRequired, db.logoutuser);

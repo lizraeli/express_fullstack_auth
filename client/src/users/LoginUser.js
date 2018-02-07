@@ -38,6 +38,7 @@ class LoginUser extends React.Component {
         password: passwordInput
       })
       .then(res => {
+        console.log("logged in: ", res);
         this.props.setUser(res.data);
         this.setState({
           loggedIn: true
